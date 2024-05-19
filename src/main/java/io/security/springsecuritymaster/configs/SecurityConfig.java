@@ -1,4 +1,4 @@
-package io.security.springsecuritymaster.security.configs;
+package io.security.springsecuritymaster.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -20,12 +22,17 @@ public class SecurityConfig {
         http.
                 authorizeHttpRequests(auth -> auth // 요청에 대한 인가 설정
                         .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll() // 정적자원은 모두 허용
-                        .requestMatchers("/").permitAll() // 루트페이지는 허용
+                        .requestMatchers("/", "/signup").permitAll() // 루트페이지는 허용
                         .anyRequest().authenticated() // 그 외 페이지 인증받아야 접속
                 )
-                .formLogin(form->form.loginPage("/login").permitAll()) // formLogin 방식으로 /login 페이지로 연결 후 인증없이 모두 허용
+                .formLogin(form -> form.loginPage("/login").permitAll()) // formLogin 방식으로 /login 페이지로 연결 후 인증없이 모두 허용
         ;
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){ // 비밀번호 암호화
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
