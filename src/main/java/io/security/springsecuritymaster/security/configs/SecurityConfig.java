@@ -19,10 +19,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.
                 authorizeHttpRequests(auth -> auth // 요청에 대한 인가 설정
+                        .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll() // 정적자원은 모두 허용
                         .requestMatchers("/").permitAll() // 루트페이지는 허용
                         .anyRequest().authenticated() // 그 외 페이지 인증받아야 접속
                 )
-                .formLogin(Customizer.withDefaults()) // form 로그인 방식으로 기본 구성으로 설정
+                .formLogin(form->form.loginPage("/login").permitAll()) // formLogin 방식으로 /login 페이지로 연결 후 인증없이 모두 허용
         ;
         return http.build();
     }
