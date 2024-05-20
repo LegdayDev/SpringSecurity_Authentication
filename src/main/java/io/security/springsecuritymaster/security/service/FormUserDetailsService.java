@@ -1,4 +1,4 @@
-package io.security.springsecuritymaster.security.configs.service;
+package io.security.springsecuritymaster.security.service;
 
 import io.security.springsecuritymaster.domain.dto.AccountContext;
 import io.security.springsecuritymaster.domain.dto.AccountDto;
